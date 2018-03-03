@@ -1,0 +1,659 @@
+{
+  "service": {
+    "service": "forex-mpjimenez-midterms",
+    "serviceObject": {
+      "name": "forex-mpjimenez-midterms"
+    },
+    "provider": {
+      "stage": "dev",
+      "region": "ap-southeast-1",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._'\",\\-\\/\\(\\)]+?)}",
+      "name": "aws",
+      "runtime": "nodejs4.3",
+      "environment": {
+        "CLIENT_ID": "305570067236.308799089329",
+        "CLIENT_SECRET": "21ddc2af403256d0de743957e328acd3",
+        "VERIFICATION_TOKEN": "P9vCsHQC7KmZJyLPUktaoiyg",
+        "INSTALL_SUCCESS_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/error.html",
+        "INSTALL_ERROR_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/index.html",
+        "NAMESPACE": "forex-mpjimenez-midterms-dev",
+        "TEAMS_TABLE": "forex-mpjimenez-midterms-dev-teams"
+      },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:GetItem",
+            "dynamodb:PutItem"
+          ],
+          "Resource": [
+            "arn:aws:dynamodb:*:*:table/forex-mpjimenez-midterms-dev-teams"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "lambda:invokeFunction"
+          ],
+          "Resource": [
+            "arn:aws:lambda:*:*:function:forex-mpjimenez-midterms-dev-actions"
+          ]
+        }
+      ],
+      "versionFunctions": true,
+      "remoteFunctionData": null,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          },
+          "ActionsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/forex-mpjimenez-midterms-dev-actions"
+            }
+          },
+          "EventsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/forex-mpjimenez-midterms-dev-events"
+            }
+          },
+          "InstallLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/forex-mpjimenez-midterms-dev-install"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "forex-mpjimenez-midterms",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-actions:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-events:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-install:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-actions:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-events:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/forex-mpjimenez-midterms-dev-install:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][1]"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "forex-mpjimenez-midterms",
+                    "dev",
+                    "ap-southeast-1",
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "ActionsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/forex-mpjimenez-midterms/dev/1520038231084-2018-03-03T00:50:31.084Z/forex-mpjimenez-midterms.zip"
+              },
+              "FunctionName": "forex-mpjimenez-midterms-dev-actions",
+              "Handler": "actions.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs4.3",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "305570067236.308799089329",
+                  "CLIENT_SECRET": "21ddc2af403256d0de743957e328acd3",
+                  "VERIFICATION_TOKEN": "P9vCsHQC7KmZJyLPUktaoiyg",
+                  "INSTALL_SUCCESS_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/error.html",
+                  "INSTALL_ERROR_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/index.html",
+                  "NAMESPACE": "forex-mpjimenez-midterms-dev",
+                  "TEAMS_TABLE": "forex-mpjimenez-midterms-dev-teams"
+                }
+              }
+            },
+            "DependsOn": [
+              "ActionsLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "ActionsLambdaVersionsWM1qlKdASF7IN2BDZDmsZDMnHefhHbD9arkzWwSRA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ActionsLambdaFunction"
+              },
+              "CodeSha256": "wKKDGv74MOM7go5byv+X4lqkL0gO8doerjb1iiESeqE="
+            }
+          },
+          "EventsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/forex-mpjimenez-midterms/dev/1520038231084-2018-03-03T00:50:31.084Z/forex-mpjimenez-midterms.zip"
+              },
+              "FunctionName": "forex-mpjimenez-midterms-dev-events",
+              "Handler": "events.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs4.3",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "305570067236.308799089329",
+                  "CLIENT_SECRET": "21ddc2af403256d0de743957e328acd3",
+                  "VERIFICATION_TOKEN": "P9vCsHQC7KmZJyLPUktaoiyg",
+                  "INSTALL_SUCCESS_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/error.html",
+                  "INSTALL_ERROR_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/index.html",
+                  "NAMESPACE": "forex-mpjimenez-midterms-dev",
+                  "TEAMS_TABLE": "forex-mpjimenez-midterms-dev-teams"
+                }
+              }
+            },
+            "DependsOn": [
+              "EventsLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "EventsLambdaVersionZmfh0QiPi2t40tmMzB08N4M49R8pkV2V9SfpR83ngvE": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "EventsLambdaFunction"
+              },
+              "CodeSha256": "wKKDGv74MOM7go5byv+X4lqkL0gO8doerjb1iiESeqE="
+            }
+          },
+          "InstallLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/forex-mpjimenez-midterms/dev/1520038231084-2018-03-03T00:50:31.084Z/forex-mpjimenez-midterms.zip"
+              },
+              "FunctionName": "forex-mpjimenez-midterms-dev-install",
+              "Handler": "install.handler",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs4.3",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "CLIENT_ID": "305570067236.308799089329",
+                  "CLIENT_SECRET": "21ddc2af403256d0de743957e328acd3",
+                  "VERIFICATION_TOKEN": "P9vCsHQC7KmZJyLPUktaoiyg",
+                  "INSTALL_SUCCESS_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/error.html",
+                  "INSTALL_ERROR_URL": "https://s3-ap-southeast-1.amazonaws.com/forex-exam-mpjimenez/index.html",
+                  "NAMESPACE": "forex-mpjimenez-midterms-dev",
+                  "TEAMS_TABLE": "forex-mpjimenez-midterms-dev-teams"
+                }
+              }
+            },
+            "DependsOn": [
+              "InstallLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "InstallLambdaVersion1832R7fxHXQcoip7wUKfLzhPpEz88vYH6nvjIhUFaV4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "InstallLambdaFunction"
+              },
+              "CodeSha256": "wKKDGv74MOM7go5byv+X4lqkL0gO8doerjb1iiESeqE="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-forex-mpjimenez-midterms",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceEvents": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "events",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceInstall": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "install",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodEventsPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceEvents"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "EventsLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodInstallGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceInstall"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "InstallLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1520038231136": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodEventsPost",
+              "ApiGatewayMethodInstallGet"
+            ]
+          },
+          "EventsLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "EventsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "InstallLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "InstallLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "TeamsDynamoDbTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "forex-mpjimenez-midterms-dev-teams",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "team_id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "team_id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 5,
+                "WriteCapacityUnits": 5
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "ActionsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ActionsLambdaVersionsWM1qlKdASF7IN2BDZDmsZDMnHefhHbD9arkzWwSRA"
+            }
+          },
+          "EventsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "EventsLambdaVersionZmfh0QiPi2t40tmMzB08N4M49R8pkV2V9SfpR83ngvE"
+            }
+          },
+          "InstallLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "InstallLambdaVersion1832R7fxHXQcoip7wUKfLzhPpEz88vYH6nvjIhUFaV4"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.ap-southeast-1.amazonaws.com/dev"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "custom": {
+      "namespace": "forex-mpjimenez-midterms-dev",
+      "stage": "dev"
+    },
+    "functions": {
+      "actions": {
+        "handler": "actions.handler",
+        "events": [],
+        "name": "forex-mpjimenez-midterms-dev-actions",
+        "package": {},
+        "vpc": {}
+      },
+      "events": {
+        "handler": "events.handler",
+        "events": [
+          {
+            "http": {
+              "path": "events",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "forex-mpjimenez-midterms-dev-events",
+        "package": {},
+        "vpc": {}
+      },
+      "install": {
+        "handler": "install.handler",
+        "events": [
+          {
+            "http": {
+              "path": "install",
+              "method": "get",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "forex-mpjimenez-midterms-dev-install",
+        "package": {},
+        "vpc": {}
+      }
+    },
+    "resources": {
+      "Resources": {
+        "TeamsDynamoDbTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "forex-mpjimenez-midterms-dev-teams",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "team_id",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "team_id",
+                "KeyType": "HASH"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 5,
+              "WriteCapacityUnits": 5
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
+    "artifact": "C:\\Users\\mpjim\\forex-mpjimenez\\forex-mpjimenez-midterms\\.serverless\\forex-mpjimenez-midterms.zip"
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/forex-mpjimenez-midterms/dev/1520038231084-2018-03-03T00:50:31.084Z",
+    "artifact": "forex-mpjimenez-midterms.zip"
+  }
+}
